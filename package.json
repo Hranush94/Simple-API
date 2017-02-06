@@ -1,5 +1,5 @@
 {
-  "name": "devslopes-api-course",
+  "name": "simple-api",
   "version": "0.0.1",
   "description": "Devslopes RESTful API Course API Project",
   "main": "dist",
@@ -7,7 +7,7 @@
     "dev": "NODE_ENV=development nodemon -w src --exec \"babel-node src --presets es2015,stage-0\"",
     "build": "babel src -s -D -d dist --presets es2015,stage-0",
     "start": "NODE_ENV=production pm2 start dist",
-    "prestart": "npm run -s build",
+    "postinstall": "npm run -s build",
     "lint": "eslint src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -23,10 +23,6 @@
       "no-console": 0,
       "no-unused-vars": 1
     }
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://bitbucket.org/jackd942/api-course.git"
   },
   "author": "Jack Davis <jack@devslopes.com>",
   "license": "ISC",
@@ -49,6 +45,10 @@
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^4.0.0",
     "path": "^0.12.7"
+  },
+  "engines": {
+    "node": "4.5.0",
+    "npm": "4.1.2"
   },
   "keywords": [
     "express",
