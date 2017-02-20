@@ -1,1 +1,19 @@
-# Simple-API
+# Simple RESTful API
+
+# Simple-API #
+
+REST API
+
+ECMAScript 6 standard
+
+## Setup ##
+
+```
+npm install
+npm run dev
+```
+
+## Usage
+```
+From the main page http://localhost:3005 you will find documentation 
+for this API and from there you are free to go!
