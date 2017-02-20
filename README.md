@@ -15,5 +15,7 @@ npm run dev
 
 ## Usage
 ```
+!!! MAKE SURE THAT YOUR MONGODB IS RUNNING !!!
+
 From the main page http://localhost:3005 you will find documentation 
 for this API and from there you are free to go!
