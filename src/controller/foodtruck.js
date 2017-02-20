@@ -10,7 +10,11 @@ import { authenticate } from '../middleware/authMiddleware';
 export default({ config, db }) => {
   let api = Router();
 
-  // '/v1/foodtruck' - GET all food trucks
+  /**
+   * @api {GET} /foodtruck GET All Food Trucks
+   * @apiVersion 0.1.0
+   * @apiGroup Foodtrucks
+   */
   api.get('/', (req, res) => {
     FoodTruck.find({}, (err, foodtrucks) => {
       if (err) {
@@ -20,7 +24,11 @@ export default({ config, db }) => {
     });
   });
 
-  // '/v1/foodtruck/:id' - GET a specific food truck
+  /**
+   * @api {GET} /foodtruck/:id GET Specific Food Truck
+   * @apiVersion 0.1.0
+   * @apiGroup Foodtrucks
+   */
   api.get('/:id', (req, res) => {
     FoodTruck.findById(req.params.id, (err, foodtruck) => {
       if (err) {
@@ -30,8 +38,33 @@ export default({ config, db }) => {
     });
   });
 
-  // '/v1/foodtruck/add' - POST - add a food truck
-  api.post('/add',  (req, res) => {
+  /**
+   * @api {POST} /foodtruck/add  POST Foodtruck
+   * @apiVersion 0.1.0
+   * @apiParam {String} name Foodtruck Name.
+   * @apiParam  {String} foodtype Foodtruck Type.
+   * @apiParam  {Number} avgcost Foodtruck Average Cost.
+   * @apiParam {Object} geometry Foodtruck Location Coordinates.
+   * @apiParamExample {json} Request-Example:
+   *
+   *  {
+   *    "avgcost": 100,
+   *    "foodtype": "Sushi Truck ",
+   *    "name": "Wasabi",
+   *    "geometry": {
+   *      "coordinates": {
+   *        "long": 44.51514225738774,
+   *        "lat": 40.18158721064374
+   *      },
+   *      "type": "Point"
+   *    }
+   *  }
+   *
+   * @apiHeader {String} Authorization Users unique access-token example 'Bearer {token}.
+   * @apiGroup Foodtrucks
+   */
+  api.post('/add', authenticate,  (req, res) => {
+    console.log('mtav')
     let newFoodTruck = new FoodTruck();
     newFoodTruck.name = req.body.name;
     newFoodTruck.foodtype = req.body.foodtype;
@@ -47,7 +80,13 @@ export default({ config, db }) => {
     });
   });
 
-  // '/v1/foodtruck/:id' - DELETE - remove a food truck
+
+  /**
+   * @api {DELETE} /foodtruck/:id  DELETE Foodtruck
+   * @apiVersion 0.1.0
+   * @apiHeader {String} Authorization Users unique access-token for example  'Bearer {token}'.
+   * @apiGroup Foodtrucks
+   */
   api.delete('/:id',  authenticate, (req, res) => {
     FoodTruck.findById(req.params.id, (err, foodtruck) =>{
         if (err) {
@@ -79,18 +118,26 @@ export default({ config, db }) => {
     })
   });
 
-
-  // '/v1/foodtruck/:id' - PUT - update an existing record
+  /**
+   * @api {PUT} /foodtruck/:id  PUT Update an existing record
+   * @apiVersion 0.1.0
+   * @apiHeader {String} Authorization Users unique access-token for example  'Bearer {token}'.
+   *  * @apiParamExample {json} Request-Example:
+   *
+   *  {
+   *    "name": "Another Name"
+   *  }
+   *
+   * @apiGroup Foodtrucks
+   */
   api.put('/:id', authenticate, (req, res) => {
     FoodTruck.findById(req.params.id, (err, foodtruck) => {
       if (err) {
         res.send(err);
       }
-      foodtruck.name = req.body.name;
-      foodtruck.foodtype = req.body.foodtype;
-      foodtruck.avgcost = req.body.avgcost;
-      foodtruck.geometry.coordinates.lat = req.body.geometry.coordinates.lat;
-      foodtruck.geometry.coordinates.long = req.body.geometry.coordinates.long;
+      foodtruck.name = req.body.name || foodtruck.name;
+      foodtruck.foodtype = req.body.foodtype || foodtruck.foodtype;
+      foodtruck.avgcost = req.body.avgcost || foodtruck.avgcost;
       foodtruck.save(function(err) {
         if (err) {
           res.send(err);
@@ -100,8 +147,22 @@ export default({ config, db }) => {
     });
   });
 
-  // add a review by a specific foodtruck id
-  // '/v1/foodtruck/reviews/add/:id'
+
+  /**
+   * @api {POST} /foodtruck/reviews/add/:id  POST  Review by a specific foodtruck id
+   * @apiVersion 0.1.0
+   * @apiParam {String} title Foodtruck Review Title.
+   * @apiParam  {String} text Foodtruck Review Text.
+   * @apiParamExample {json} Request-Example:
+   *
+   *  {
+   *    "title": "Amazing!",
+   *    "text": "Nice service"
+   *  }
+   *
+   * @apiHeader {String} Authorization Users unique access-token example  'Bearer {token}.
+   * @apiGroup Foodtrucks
+   */
   api.post('/reviews/add/:id', (req, res) => {
     FoodTruck.findById(req.params.id, (err, foodtruck) => {
       if (err) {
@@ -127,8 +188,12 @@ export default({ config, db }) => {
     });
   });
 
-  // get reviews for a specific foodtruck id
-  // '/v1/foodtruck/reviews/:id'
+
+  /**
+   * @api {GET} /foodtruck/reviews/:id GET Reviews for a specific foodtruck id
+   * @apiVersion 0.1.0
+   * @apiGroup Foodtrucks
+   */
   api.get('/reviews/:id', (req, res) => {
     Review.find({foodtruck: req.params.id}, (err, reviews) => {
       if (err) {

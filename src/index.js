@@ -1,6 +1,7 @@
 import http from 'http';
 import express from 'express';
 import bodyParser from 'body-parser';
+import path from 'path';
 import mongoose from 'mongoose';
 import config from './config';
 import routes from './routes';
@@ -15,6 +16,9 @@ app.server = http.createServer(app);
 app.use(bodyParser.json({
   limit : config.bodyLimit
 }));
+
+//documentation
+app.use('/', express.static(path.join( __dirname,'./../doc')));
 
 // passport config
 app.use(passport.initialize());
